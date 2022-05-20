@@ -4,8 +4,6 @@ import Header from "./Header";
 import Show from "./Show";
 import Empty from "./Empty";
 import Form from "./Form";
-import Error from "./Error";
-import Status from "./Status";
 import { useVisualMode } from "hooks/useVisualMode";
 
 const EMPTY = "EMPTY";
@@ -27,7 +25,7 @@ export default function Appointment(props) {
       )}
       {mode === CREATE && (
         <Form
-          interviewers={[]}
+          interviewers={props.interviewers}
           onCancel={back}
         />
       )}
