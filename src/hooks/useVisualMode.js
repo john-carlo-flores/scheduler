@@ -5,7 +5,7 @@ export const useVisualMode = (initial) => {
   const [history, setHistory] = useState([initial]);
 
   const transition = ((newMode, replace = false) => {
-    setHistory(prev => replace ? [...prev].splice(-1, 1, newMode) : [...prev, newMode]);
+    setHistory(prev => replace ? [...prev.slice(0, -1), newMode] : [...prev, newMode]);
     setMode(newMode);
   });
 
