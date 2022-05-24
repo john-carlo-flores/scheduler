@@ -26,7 +26,8 @@ export const useApplicationData = () => {
       .then(() => {
         setState(prev => ({
           ...prev,
-          appointments
+          appointments,
+          days: updateSpots(appointments, id)
         }));
       });
   };
@@ -46,9 +47,32 @@ export const useApplicationData = () => {
       .then(() => {
         setState(prev => ({
           ...prev,
-          appointments
+          appointments,
+          days: updateSpots(appointments, id)
         }));
       });
+  };
+
+  const updateSpots = (appointments, id) => {
+    const dayIndex = state.days.findIndex(day => day.name === state.day);
+
+    const appointmentList = [...state.days[dayIndex].appointments];
+    if (id && !appointmentList.includes(id)) appointmentList.push(id);
+  
+    let spotsRemaining = appointmentList.length;
+    appointmentList.forEach(id => {
+      if (appointments[id].interview) spotsRemaining--;
+    });
+  
+    const day = {
+      ...state.days[dayIndex],
+      spots: spotsRemaining
+    }
+    
+    const days = [...state.days]
+    days[dayIndex] = day;
+  
+    return days;
   };
   
   useEffect(() => {
