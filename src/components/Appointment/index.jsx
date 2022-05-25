@@ -49,7 +49,7 @@ export default function Appointment(props) {
     <article className="appointment">
       <Header />
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
-      {mode === SHOW && (
+      {mode === SHOW && props.interview && (
         <Show
           student={props.interview.student}
           interviewer={props.interview.interviewer}

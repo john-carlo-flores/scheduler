@@ -1,7 +1,5 @@
 import { useReducer, useEffect } from "react";
 import axios from "axios";
-import { action } from "@storybook/addon-actions";
-import Application from "components/Application";
 
 const SET_DAY = "SET_DAY";
 const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
@@ -16,10 +14,20 @@ export const useApplicationData = () => {
   });
 
   function reducer(state, action) {
+    console.log('reducer action type', action.type);
+    console.log('reducer action', action);
+    console.log('reducer state', state);
+
     switch(action.type) {
       case SET_DAY:
         return { ...state, day: action.day};
       case SET_APPLICATION_DATA:
+        console.log('SET_APPLICATION_DATA', {          
+          ...state,
+          days: action.days,
+          appointments: action.appointments,
+          interviewers: action.interviewers
+        });
         return {
           ...state,
           days: action.days,
@@ -28,7 +36,7 @@ export const useApplicationData = () => {
         };
       case SET_INTERVIEW:
         return { 
-          ...state, 
+          ...state,
           appointments: action.appointments,
           days: action.days
         };
@@ -36,8 +44,8 @@ export const useApplicationData = () => {
         throw new Error(
           `Tried to reduce with unsupported action type: ${action.type}`
         );
-    }
-  }
+    };
+  };
 
   const setDay = day => dispatch({ type: SET_DAY, day });
 
@@ -52,7 +60,7 @@ export const useApplicationData = () => {
       [id]: appointment
     };
   
-    return axios.put(`/api/appointments/${id}`, { interview: interview })
+    return axios.put(`/api/appointments/${id}`, { interview })
       .then(() => {
         dispatch({
           type: SET_INTERVIEW,
@@ -60,7 +68,7 @@ export const useApplicationData = () => {
           days: updateSpots(appointments, id)
         });
       });
-  }
+  };
 
   const cancelInterview = id => {
     const appointment = {
@@ -84,6 +92,10 @@ export const useApplicationData = () => {
   };
 
   const updateSpots = (appointments, id) => {
+    console.log('state.day', state.day);
+    console.log('state', state);
+    console.log('state.days.', state.days);
+
     const dayIndex = state.days.findIndex(day => day.name === state.day);
 
     const appointmentList = [...state.days[dayIndex].appointments];
@@ -97,9 +109,9 @@ export const useApplicationData = () => {
     const day = {
       ...state.days[dayIndex],
       spots: spotsRemaining
-    }
+    };
     
-    const days = [...state.days]
+    const days = [...state.days];
     days[dayIndex] = day;
   
     return days;
@@ -118,7 +130,7 @@ export const useApplicationData = () => {
         interviewers: all[2].data
       });
     });
-  }, [state]);
+  }, []);
 
   return { state, setDay, bookInterview, cancelInterview };
 };
