@@ -14,20 +14,10 @@ export const useApplicationData = () => {
   });
 
   function reducer(state, action) {
-    console.log('reducer action type', action.type);
-    console.log('reducer action', action);
-    console.log('reducer state', state);
-
     switch(action.type) {
       case SET_DAY:
         return { ...state, day: action.day};
       case SET_APPLICATION_DATA:
-        console.log('SET_APPLICATION_DATA', {          
-          ...state,
-          days: action.days,
-          appointments: action.appointments,
-          interviewers: action.interviewers
-        });
         return {
           ...state,
           days: action.days,
