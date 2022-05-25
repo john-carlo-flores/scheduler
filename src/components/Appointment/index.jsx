@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./styles.scss"
 import Header from "./Header";
 import Show from "./Show";
@@ -44,6 +44,16 @@ export default function Appointment(props) {
       .then(() => transition(EMPTY))
       .catch((err) => transition(ERROR_DELETE, true));
   };
+
+  useEffect(() => {
+    if (mode === EMPTY && props.interview) {
+      transition(SHOW);
+    }
+
+    if (mode === SHOW && !props.interview) {
+      transition(EMPTY);
+    }
+  }, [props.interview, transition, mode]);
 
   return (
     <article className="appointment" data-testid="appointment">

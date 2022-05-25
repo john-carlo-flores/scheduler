@@ -7,7 +7,8 @@ export const useApplicationData = () => {
     day: "Monday",
     days: [],
     appointments: {},
-    interviewers: {}
+    interviewers: {},
+    ws: new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
   });
 
   const setDay = day => dispatch({ type: SET_DAY, day });
@@ -77,6 +78,8 @@ export const useApplicationData = () => {
   };
   
   useEffect(() => {
+    state.ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+
     Promise.all([
       axios.get('/api/days'),
       axios.get('/api/appointments'),
@@ -89,7 +92,38 @@ export const useApplicationData = () => {
         interviewers: all[2].data
       });
     });
+
+    return () => {
+      state.ws.close();
+      state.ws = null;
+    }
   }, []);
+
+  useEffect(() => {
+    state.ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      const { type, id, interview } = data;
+      console.log('onmessage', interview);
+
+      if (type === "SET_INTERVIEW") {
+        const appointment = {
+          ...state.appointments[id],
+          interview: interview ? {...interview} : null
+        };
+        
+        const appointments = {
+          ...state.appointments,
+          [id]: appointment
+        };
+
+        dispatch({
+          type: SET_INTERVIEW,
+          appointments,
+          days: updateSpots(appointments, id)
+        });
+      }
+    }
+  }, [state.appointments])
 
   return { state, setDay, bookInterview, cancelInterview };
 };
