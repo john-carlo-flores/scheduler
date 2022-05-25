@@ -82,10 +82,6 @@ export const useApplicationData = () => {
   };
 
   const updateSpots = (appointments, id) => {
-    console.log('state.day', state.day);
-    console.log('state', state);
-    console.log('state.days.', state.days);
-
     const dayIndex = state.days.findIndex(day => day.name === state.day);
 
     const appointmentList = [...state.days[dayIndex].appointments];
