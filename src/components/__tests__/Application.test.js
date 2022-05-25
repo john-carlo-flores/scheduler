@@ -51,7 +51,7 @@ describe("Application", () => {
   it("loads data, cancels an interview and increases the spots remaining for Monday by 1", async () => {
     const { container } = render(<Application />);
     const student = "Archie Cohen";
-  
+    
     await waitForElement(() => getByText(container, student));
 
     const appointment = getAllByTestId(container, "appointment").find(appointment => 
