@@ -80,10 +80,10 @@ export const useApplicationData = () => {
       });
     });
 
-    return () => {
-      state.ws.close();
-      state.ws = null;
-    }
+    // return () => {
+    //   state.ws.close();
+    //   state.ws = null;
+    // }
   }, []);
 
   useEffect(() => {
