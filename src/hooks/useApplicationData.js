@@ -79,11 +79,6 @@ export const useApplicationData = () => {
         interviewers: all[2].data
       });
     });
-
-    // return () => {
-    //   state.ws.close();
-    //   state.ws = null;
-    // }
   }, []);
 
   useEffect(() => {
