@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
-import "./styles.scss"
+import { useVisualMode } from "hooks/useVisualMode";
+import "./styles.scss";
+
 import Header from "./Header";
 import Show from "./Show";
 import Empty from "./Empty";
@@ -7,17 +9,18 @@ import Form from "./Form";
 import Status from "./Status";
 import Confirm from "./Confirm";
 import Error from "./Error";
-import { useVisualMode } from "hooks/useVisualMode";
 
-const EMPTY = "EMPTY";
-const SHOW = "SHOW";
-const CREATE = "CREATE";
-const SAVING = "SAVING";
-const DELETING = "DELETING";
-const CONFIRM = "CONFIRM";
-const EDIT = "EDIT";
-const ERROR_SAVE = "ERROR_SAVE";
-const ERROR_DELETE = "ERROR_DELETE";
+import { 
+  SHOW, 
+  EMPTY, 
+  CREATE, 
+  SAVING, 
+  DELETING, 
+  CONFIRM, 
+  EDIT, 
+  ERROR_SAVE, 
+  ERROR_DELETE 
+} from "constants/constantModes";
 
 export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(props.interview ? SHOW : EMPTY);
@@ -45,6 +48,7 @@ export default function Appointment(props) {
       .catch((err) => transition(ERROR_DELETE, true));
   };
 
+  // Force transition on WebSocket.message SET_INTERVIEW
   useEffect(() => {
     if (mode === EMPTY && props.interview) {
       transition(SHOW);
@@ -53,7 +57,7 @@ export default function Appointment(props) {
     if (mode === SHOW && !props.interview) {
       transition(EMPTY);
     }
-  }, [props.interview, transition, mode]);
+  }, [props.interview, mode]);
 
   return (
     <article className="appointment" data-testid="appointment">
