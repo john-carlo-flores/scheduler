@@ -57,7 +57,7 @@ export default function Appointment(props) {
     if (mode === SHOW && !props.interview) {
       transition(EMPTY);
     }
-  }, [props.interview, mode]);
+  }, [props.interview, transition, mode]);
 
   return (
     <article className="appointment" data-testid="appointment">
