@@ -8,7 +8,7 @@ export const useApplicationData = () => {
     days: [],
     appointments: {},
     interviewers: {},
-    ws: new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
+    ws: null
   });
 
   const setDay = day => dispatch({ type: SET_DAY, day });
@@ -29,7 +29,7 @@ export const useApplicationData = () => {
         dispatch({
           type: SET_INTERVIEW,
           appointments,
-          days: updateSpots(appointments, id)
+          days: updateSpots(appointments)
         });
       });
   };
@@ -50,31 +50,18 @@ export const useApplicationData = () => {
         dispatch({
           type: SET_INTERVIEW,
           appointments,
-          days: updateSpots(appointments, id)
+          days: updateSpots(appointments)
         });
       });
   };
 
-  const updateSpots = (appointments, id) => {
-    const dayIndex = state.days.findIndex(day => day.name === state.day);
+  const updateSpots = (appointments) => {
+    const day = state.days.find(day => day.name === state.day);
+    const spots = day.appointments.filter(id => !appointments[id].interview).length;
 
-    const appointmentList = [...state.days[dayIndex].appointments];
-    if (id && !appointmentList.includes(id)) appointmentList.push(id);
-  
-    let spotsRemaining = appointmentList.length;
-    appointmentList.forEach(id => {
-      if (appointments[id].interview) spotsRemaining--;
-    });
-  
-    const day = {
-      ...state.days[dayIndex],
-      spots: spotsRemaining
-    };
-    
-    const days = [...state.days];
-    days[dayIndex] = day;
-  
-    return days;
+    return state.days.map(day => 
+      state.day === day.name ? { ...day, spots } : { ...day }
+    );
   };
   
   useEffect(() => {
@@ -103,7 +90,6 @@ export const useApplicationData = () => {
     state.ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
       const { type, id, interview } = data;
-      console.log('onmessage', interview);
 
       if (type === "SET_INTERVIEW") {
         const appointment = {
