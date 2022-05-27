@@ -40,7 +40,7 @@ export default function Appointment(props) {
   };
 
   const destroy = () => {
-    transition(DELETING);
+    transition(DELETING, true);
 
     props
       .cancelInterview(props.id)
@@ -48,7 +48,6 @@ export default function Appointment(props) {
       .catch((err) => transition(ERROR_DELETE, true));
   };
 
-  // Force transition on WebSocket.message SET_INTERVIEW
   useEffect(() => {
     if (mode === EMPTY && props.interview) {
       transition(SHOW);
