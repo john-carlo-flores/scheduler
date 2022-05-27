@@ -1,14 +1,5 @@
 import React, { useEffect } from "react";
-import { useVisualMode } from "hooks/useVisualMode";
-import "./styles.scss";
-
-import Header from "./Header";
-import Show from "./Show";
-import Empty from "./Empty";
-import Form from "./Form";
-import Status from "./Status";
-import Confirm from "./Confirm";
-import Error from "./Error";
+import { useVisualMode } from "../../hooks/useVisualMode";
 
 import { 
   SHOW, 
@@ -20,11 +11,25 @@ import {
   EDIT, 
   ERROR_SAVE, 
   ERROR_DELETE 
-} from "constants/constantModes";
+} from "../../constants/constantModes";
+
+import Header from "./Header";
+import Show from "./Show";
+import Empty from "./Empty";
+import Form from "./Form";
+import Status from "./Status";
+import Confirm from "./Confirm";
+import Error from "./Error";
+
+import "./styles.scss";
 
 export default function Appointment(props) {
+  // Visual mode logic coming from custom hook
+  // if interview prop exists default mode is SHOW, else EMPTY
   const { mode, transition, back } = useVisualMode(props.interview ? SHOW : EMPTY);
 
+  // Create/Edit interview object and transition to status 'SAVING'
+  // Call bookInterview and transition based on response
   const save = (name, interviewer) => {
     const interview = {
       student: name,
@@ -39,6 +44,7 @@ export default function Appointment(props) {
       .catch((err) => transition(ERROR_SAVE, true));
   };
 
+  // Transition to Status 'DELETING', call cancelInterview and transition based on response
   const destroy = () => {
     transition(DELETING, true);
 
@@ -48,13 +54,14 @@ export default function Appointment(props) {
       .catch((err) => transition(ERROR_DELETE, true));
   };
 
+  // Change transition when interview changes based on server-side data update
   useEffect(() => {
     if (mode === EMPTY && props.interview) {
-      transition(SHOW);
+      return transition(SHOW);
     }
 
     if (mode === SHOW && !props.interview) {
-      transition(EMPTY);
+      return transition(EMPTY);
     }
   }, [props.interview, transition, mode]);
 

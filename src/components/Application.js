@@ -11,12 +11,13 @@ export default function Application() {
     setDay,
     bookInterview,
     cancelInterview
-  } = useApplicationData();
+  } = useApplicationData(); // Business logic coming from custom hook
 
-  const dailyAppointments = getAppointmentsForDay(state, state.day);
-  const interviewers = getInterviewersForDay(state, state.day);
+  const appointmentsForDay = getAppointmentsForDay(state, state.day); // Iterates state to match appointments objects per day
+  const interviewersForDay = getInterviewersForDay(state, state.day); // Iterates state to match interviewers objects per day
   
-  const appointmentList = dailyAppointments.map(appointment => {
+  // Mapping appointments array to create an Appointment component per appointment in state
+  const appointmentsList = appointmentsForDay.map(appointment => {
     const interview = getInterview(state, appointment.interview);
     
     return (
@@ -24,7 +25,7 @@ export default function Application() {
         key={appointment.id}
         {...appointment}
         interview={interview}
-        interviewers={interviewers}
+        interviewers={interviewersForDay}
         bookInterview={bookInterview}
         cancelInterview={cancelInterview}
       />
@@ -54,7 +55,7 @@ export default function Application() {
         />
       </section>
       <section className="schedule">
-        {appointmentList}
+        {appointmentsList}
         <Appointment key="last" time="5pm" />
       </section>
     </main>

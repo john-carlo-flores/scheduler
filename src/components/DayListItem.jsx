@@ -2,6 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import "components/DayListItem.scss"
 
+// Format to 'spot' if 1 remaining, else 'spots'
 const formatSpots = (spots) => {
   if (spots === 1) return '1 spot';
   if (spots > 0) return `${spots} spots`;

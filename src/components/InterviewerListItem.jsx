@@ -4,6 +4,8 @@ import "components/InterviewerListItem.scss"
 
 export default function InterviewerListItem(props) {
   const { avatar, name, setInterviewer, selected } = props;
+
+  // Append selected CSS class if interviewer is selected
   const listClasses = classNames("interviewers__item", {
     'interviewers__item--selected': selected
   });

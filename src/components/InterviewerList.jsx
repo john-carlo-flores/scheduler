@@ -4,6 +4,7 @@ import InterviewerListItem from "./InterviewerListItem";
 import PropTypes from "prop-types";
 
 export default function InterviewerList(props) {
+   // Mapping interviewers array to create an InterviewerListItem component per interviewer in state
   const interviewerListItems = props.interviewers.map(interviewer => 
     <InterviewerListItem 
       key={interviewer.id}
