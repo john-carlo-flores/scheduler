@@ -136,7 +136,7 @@ describe("Application", () => {
     expect(getByText(appointment, "Save")).toBeInTheDocument();
   });
 
-  it("shows the delete error when failing to delete an appointment and goes back to Confirm on close", async() => {
+  it("shows the delete error when failing to delete an appointment and goes back to SHOW on close", async() => {
     axios.delete.mockRejectedValueOnce();
 
     const { container } = render(<Application />);
@@ -157,6 +157,6 @@ describe("Application", () => {
     expect(getByText(appointment, /could not cancel appointment/i)).toBeInTheDocument();
     fireEvent.click(getByAltText(appointment, "Close"));
 
-    expect(getByText(appointment, /are you sure you would like to delete./i)).toBeInTheDocument();
+    expect(getByText(appointment, "Archie Cohen")).toBeInTheDocument();
   });
 });
